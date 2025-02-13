@@ -24,11 +24,11 @@ public class RegularBulletBehavior : MonoBehaviour
         {
             Debug.Log("Enemy hit!");
             Destroy(gameObject); 
-            Destroy(targetTransform.gameObject);
-            // if (GameManager.Instance != null)  
-            // {
-            //     GameManager.Instance.AddGold(5); 
-            // }
+            Destroy(targetTransform.gameObject); 
+            if (GameManager.Instance != null)  
+            { 
+                GameManager.Instance.AddGold(5); 
+            }
         }
 
         if (transform.position.magnitude > 7f)
