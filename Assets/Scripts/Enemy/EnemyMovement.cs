@@ -14,9 +14,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float cubicSpeed = 4f;      
     [SerializeField] private float quadraticJourneyTime = 4.5f; 
     [SerializeField] private float cubicJourneyTime = 5f;   
-
     
-
     public void Initialize(Transform targetLocation, MovementType moveType)
     {
         target = targetLocation;
@@ -101,28 +99,5 @@ public class EnemyMovement : MonoBehaviour
         }
         
     }
-
-
-    void OnDrawGizmos()
-    {
-        if (target == null) return;
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(startPoint, 0.1f);
-        Gizmos.DrawSphere(control1, 0.1f);
-        Gizmos.DrawSphere(control2, 0.1f);
-        Gizmos.DrawSphere(midPoint, 0.1f);
-        Gizmos.DrawSphere(control3, 0.1f);
-        Gizmos.DrawSphere(control4, 0.1f);
-        Gizmos.DrawSphere(target.position, 0.1f);
-
-        Gizmos.color = Color.green;
-        Vector3 prev = startPoint;
-        for (float i = 0; i <= 1; i += 0.05f)
-        {
-            Vector3 point = DoubleCubicBezier(startPoint, control1, control2, midPoint, control3, control4, target.position, i);
-            Gizmos.DrawLine(prev, point);
-            prev = point;
-        }
-    }
+    
 }

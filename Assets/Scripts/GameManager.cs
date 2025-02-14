@@ -8,8 +8,11 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public int playerHP = 5;
     public int gold = 0;
+    
     public TextMeshProUGUI hpText;
     public TextMeshProUGUI goldText;
+    public TextMeshProUGUI waveText;
+
     public GameObject gameOverUI;
     public GameObject shopUI;
     public GameObject goldPrefab;
@@ -79,6 +82,11 @@ public class GameManager : MonoBehaviour
     {
         hpText.text = "HP: " + playerHP;
         goldText.text = "Gold: " + gold;
+    }
+    
+    public void UpdateWaveText(int waveIndex)
+    {
+        waveText.text = $"Wave: {waveIndex + 1}";
     }
 
     void GameOver()
