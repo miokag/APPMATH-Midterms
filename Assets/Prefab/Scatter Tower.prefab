@@ -100,7 +100,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 271a1fa35d4c7a6429191b5960425cde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rocket: {fileID: 3745316790340928181, guid: 786106c95791ade48abac6a56b155f54, type: 3}
-  rocketCooldown: 5
-  rocketCount: 4
-  rocketLifetime: 3
+  bulletPrefab: {fileID: 5603925553309326681, guid: 35f3c508ae1f47b4e9d232b01cf6feed, type: 3}
+  fireInterval: 1
+  bulletCount: 4
+  bulletSpeed: 5
+  bulletLifetime: 3
+  bulletKillDistance: 0.8

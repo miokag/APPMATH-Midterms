@@ -1496,10 +1496,10 @@ MonoBehaviour:
   waves:
   - enemyCount: 4
     spawnInterval: 2
-    movementType: 0
+    movementType: 1
   - enemyCount: 3
     spawnInterval: 1
-    movementType: 1
+    movementType: 0
   timeBetweenWaves: 5
 --- !u!4 &1356053354
 Transform:
@@ -1846,14 +1846,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5063394557205514777, guid: b01001a8f5c92f942b813c237bea0648, type: 3}
-      propertyPath: rocket
-      value: 
-      objectReference: {fileID: 3745316790340928181, guid: 786106c95791ade48abac6a56b155f54, type: 3}
-    - target: {fileID: 5063394557205514777, guid: b01001a8f5c92f942b813c237bea0648, type: 3}
-      propertyPath: bulletPrefab
-      value: 
-      objectReference: {fileID: 5603925553309326681, guid: 35f3c508ae1f47b4e9d232b01cf6feed, type: 3}
     - target: {fileID: 9040982067834329132, guid: b01001a8f5c92f942b813c237bea0648, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.66
