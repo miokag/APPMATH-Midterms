@@ -8,11 +8,9 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public int playerHP = 5;
     public int gold = 0;
-    
     public TextMeshProUGUI hpText;
     public TextMeshProUGUI goldText;
     public TextMeshProUGUI waveText;
-
     public GameObject gameOverUI;
     public GameObject shopUI;
     public GameObject goldPrefab;
@@ -33,8 +31,64 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Text fields not assigned in the Inspector.");
         }
 
-        //shopUI.transform.localScale = Vector3.zero; // Start with UI hidden
-        //shopUI.SetActive(false);
+        shopUI.transform.localScale = Vector3.zero; // Start with UI hidden
+        shopUI.SetActive(false);
+    }
+    
+    public void SpawnGold(Vector3 position)
+    {
+        if (goldPrefab != null)
+        {
+            Instantiate(goldPrefab, position, Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogError("Gold prefab is not assigned in the GameManager.");
+        }
+    }
+
+    public void PauseGame()
+    {
+        if (isAnimating) return; // Prevent multiple toggles during animation
+
+        isPaused = !isPaused; 
+
+        if (isPaused)
+        {
+            StartCoroutine(AnimateUI(shopUI, Vector3.zero, Vector3.one, 0.3f, true)); // Scale up, then pause
+        }
+        else
+        {
+            StartCoroutine(AnimateUI(shopUI, Vector3.one, Vector3.zero, 0.3f, false)); // Scale down, then unpause
+        }
+    }
+
+    private IEnumerator AnimateUI(GameObject ui, Vector3 startScale, Vector3 endScale, float duration, bool pauseAfter)
+    {
+        isAnimating = true;
+        ui.SetActive(true);
+        float timeElapsed = 0f;
+
+        while (timeElapsed < duration)
+        {
+            timeElapsed += Time.unscaledDeltaTime; // Use unscaled time to keep animation smooth
+            float t = TweenUtils.EaseOut(timeElapsed / duration);
+            ui.transform.localScale = Vector3.Lerp(startScale, endScale, t);
+            yield return null;
+        }
+
+        ui.transform.localScale = endScale;
+        isAnimating = false;
+
+        if (pauseAfter)
+        {
+            Time.timeScale = 0f; // Pause the game after the animation completes
+        }
+        else
+        {
+            Time.timeScale = 1f; // Resume after closing animation
+            ui.SetActive(false);
+        }
     }
 
     void Start()
@@ -83,11 +137,6 @@ public class GameManager : MonoBehaviour
         hpText.text = "HP: " + playerHP;
         goldText.text = "Gold: " + gold;
     }
-    
-    public void UpdateWaveText(int waveIndex)
-    {
-        waveText.text = $"Wave: {waveIndex + 1}";
-    }
 
     void GameOver()
     {
@@ -104,5 +153,9 @@ public class GameManager : MonoBehaviour
 
         hpText.text = "HP: 0";
         gameOverUI.SetActive(true);
+    }
+    public void UpdateWaveText(int waveIndex)
+    {
+        waveText.text = $"Wave: {waveIndex + 1}";
     }
 }

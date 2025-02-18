@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a545cb73556ed4fb5681cfef6ed727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  quadraticSpeed: 4
-  cubicSpeed: 4
-  quadraticJourneyTime: 4.5
-  cubicJourneyTime: 5
+  quadraticSpeed: 7
+  cubicSpeed: 7
+  quadraticJourneyTime: 7
+  cubicJourneyTime: 7

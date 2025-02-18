@@ -3,51 +3,82 @@ using UnityEngine;
 
 public class ScatterTowerBehavior : MonoBehaviour
 {
-    [Header("Rocket")]
-    [SerializeField] private GameObject rocket;
-    [SerializeField] private float rocketCooldown = 5f;
-    [SerializeField] private int rocketCount = 4;
-    [SerializeField] private float rocketLifetime = 3f;
-    
+    [Header("Scatter Tower Settings")]
+    [SerializeField] private GameObject bulletPrefab; // Regular bullet prefab
+    [SerializeField] private float fireInterval = 1f; // Time between shots
+    [SerializeField] private int bulletCount = 4; // Number of bullets per shot
+    [SerializeField] private float bulletSpeed = 5f; // Speed of bullets
+    [SerializeField] private float bulletLifetime = 3f; // Lifetime of bullets
+    [SerializeField] private float bulletKillDistance = 0.8f; // Distance at which bullets destroy enemies
+
     private void Start()
     {
-        StartCoroutine(FireRocketsRoutine());
+        StartCoroutine(FireRoutine());
     }
 
-    private IEnumerator FireRocketsRoutine()
+    private IEnumerator FireRoutine()
     {
         while (true)
         {
-            InstantiateRocket();
-            yield return new WaitForSeconds(rocketCooldown);
+            FireBullets();
+            yield return new WaitForSeconds(fireInterval);
         }
     }
 
-    private void InstantiateRocket()
+    private void FireBullets()
     {
-        float angleIncrement = 360f / rocketCount; // Divide 360 degrees by the rocket count
-        for (int i = 0; i < rocketCount; i++)
+        float angleIncrement = 360f / bulletCount; // Divide 360 degrees by the bullet count
+
+        for (int i = 0; i < bulletCount; i++)
         {
-            float angle = i * angleIncrement;
+            float angle = i * angleIncrement; // Calculate the angle for each bullet
+            Vector2 direction = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)); // Convert angle to direction
 
-            float x = Mathf.Cos(angle * Mathf.Deg2Rad);
-            float y = Mathf.Sin(angle * Mathf.Deg2Rad);
+            GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            RegularBulletBehavior bulletBehavior = bullet.GetComponent<RegularBulletBehavior>();
 
-            Vector2 spawnPosition = (Vector2)transform.position;
-            Quaternion rotation = Quaternion.Euler(0, 0, angle);
-            GameObject newRocket = Instantiate(rocket, spawnPosition, rotation);
+            if (bulletBehavior != null)
+            {
+                // Assign a target to the bullet
+                Transform target = FindClosestEnemy();
+                bulletBehavior.Initialize(direction, bulletSpeed, target, bulletKillDistance);
+            }
 
-            Destroy(newRocket, rocketLifetime);
+            Destroy(bullet, bulletLifetime); // Destroy bullet after lifetime
         }
     }
 
-    public void IncreaseRocketCount(int amount)
+    private Transform FindClosestEnemy()
     {
-        rocketCount = Mathf.Min(rocketCount + amount, 8);
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        Transform closestEnemy = null;
+        float closestDistanceSquared = Mathf.Infinity;
+
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy == null) continue;
+
+            float dx = transform.position.x - enemy.transform.position.x;
+            float dy = transform.position.y - enemy.transform.position.y;
+            float distanceSquared = dx * dx + dy * dy;
+
+            if (distanceSquared < closestDistanceSquared)
+            {
+                closestEnemy = enemy.transform;
+                closestDistanceSquared = distanceSquared;
+            }
+        }
+
+        return closestEnemy;
     }
 
-    public int RocketCount
+    public void IncreaseBulletCount(int amount)
     {
-        get { return rocketCount; }
+        bulletCount = Mathf.Min(bulletCount + amount, 8); // Limit bullet count to 8
+    }
+
+    public int BulletCount
+    {
+        get { return bulletCount; }
     }
 }
