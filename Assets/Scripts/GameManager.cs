@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -34,34 +35,25 @@ public class GameManager : MonoBehaviour
         shopUI.transform.localScale = Vector3.zero; // Start with UI hidden
         shopUI.SetActive(false);
     }
-    
-    public void SpawnGold(Vector3 position)
-    {
-        if (goldPrefab != null)
-        {
-            Instantiate(goldPrefab, position, Quaternion.identity);
-        }
-        else
-        {
-            Debug.LogError("Gold prefab is not assigned in the GameManager.");
-        }
-    }
 
     public void PauseGame()
     {
-        if (isAnimating) return; // Prevent multiple toggles during animation
+        if (isAnimating) return;
 
-        isPaused = !isPaused; 
+        isPaused = !isPaused;
 
         if (isPaused)
         {
-            StartCoroutine(AnimateUI(shopUI, Vector3.zero, Vector3.one, 0.3f, true)); // Scale up, then pause
+            Time.timeScale = 0f;
         }
         else
         {
-            StartCoroutine(AnimateUI(shopUI, Vector3.one, Vector3.zero, 0.3f, false)); // Scale down, then unpause
+            Time.timeScale = 1f;
         }
     }
+    
+
+
 
     private IEnumerator AnimateUI(GameObject ui, Vector3 startScale, Vector3 endScale, float duration, bool pauseAfter)
     {
@@ -156,6 +148,6 @@ public class GameManager : MonoBehaviour
     }
     public void UpdateWaveText(int waveIndex)
     {
-        waveText.text = $"Wave: {waveIndex + 1}";
+        waveText.text = $"Wave {waveIndex + 1}";
     }
 }
