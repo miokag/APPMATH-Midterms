@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,12 +12,27 @@ public class EnemySpawner : MonoBehaviour
     public float timeBetweenWaves = 5f; // Time between waves
 
     private int currentWaveIndex = 0;
-    private bool isSpawning = true;
+    private bool isSpawning = false;
 
     void Start()
     {
-        if (waves.Count > 0)
+        // Start the wave spawning process once towers are placed
+        if (AreTowersPlaced() && waves.Count > 0)
         {
+            StartCoroutine(SpawnWaves());
+        }
+        else
+        {
+            GameManager.Instance.waveText.text = "Place A Tower";
+        }
+    }
+
+    private void Update()
+    {
+        // Ensure we start the spawning process only once
+        if (!isSpawning && AreTowersPlaced() && waves.Count > 0)
+        {
+            isSpawning = true;
             StartCoroutine(SpawnWaves());
         }
     }
@@ -51,7 +67,13 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy(Transform spawnPoint, MovementType moveType)
     {
-        GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
+        // Calculate random position within the spawn point's square bounds using Mathf.Lerp
+        float randomX = Mathf.Lerp(-spawnPoint.localScale.x / 2f, spawnPoint.localScale.x / 2f, UnityEngine.Random.value);
+        float randomY = Mathf.Lerp(-spawnPoint.localScale.y / 2f, spawnPoint.localScale.y / 2f, UnityEngine.Random.value);
+        Vector3 randomPosition = spawnPoint.position + new Vector3(randomX, randomY, 0);
+
+        // Instantiate enemy at the random position
+        GameObject enemy = Instantiate(enemyPrefab, randomPosition, Quaternion.identity);
         EnemyMovement movement = enemy.GetComponent<EnemyMovement>();
 
         if (movement != null)
@@ -60,9 +82,17 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+
+
+
     public void StopSpawning()
     {
         isSpawning = false;
         StopAllCoroutines();
+    }
+
+    private bool AreTowersPlaced()
+    {
+        return FindObjectsOfType<TowerBehavior>().Length > 0 || FindObjectsOfType<ScatterTowerBehavior>().Length > 0;
     }
 }

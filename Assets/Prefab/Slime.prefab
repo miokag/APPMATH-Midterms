@@ -124,6 +124,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   quadraticSpeed: 4
-  cubicSpeed: 4
-  quadraticJourneyTime: 4.5
+  cubicSpeed: 5
+  quadraticJourneyTime: 5
   cubicJourneyTime: 5

@@ -7,14 +7,16 @@ public class RegularBulletBehavior : MonoBehaviour
     private Transform targetTransform;
     private float killDistance; // This will be set from the turret's upgrade
 
+    private Vector2 spawnPosition; // Store the position where the bullet was spawned
+
     public void Initialize(Vector2 direction, float speed, Transform target, float distance)
     {
         moveDirection = direction;
         moveSpeed = speed;
         targetTransform = target;
         killDistance = distance; // Set the kill distance from turret
+        spawnPosition = transform.position; // Store the spawn position
     }
-
     void Update()
     {
         transform.position += (Vector3)(moveDirection * moveSpeed * Time.deltaTime);
@@ -24,22 +26,16 @@ public class RegularBulletBehavior : MonoBehaviour
         {
             Debug.Log("Enemy hit!");
             Destroy(gameObject); 
-            Destroy(targetTransform.gameObject);
+            Destroy(targetTransform.gameObject); 
             if (GameManager.Instance != null)  
             {
-                // Spawn gold drop
-                Debug.Log("Instantiating gold drop at: " + transform.position);
                 GameObject goldDrop = Instantiate(GameManager.Instance.goldPrefab, transform.position, Quaternion.identity);
-
-                // Get reference to UI target (goldText position)
                 Transform goldUI = GameManager.Instance.goldText.transform;
-    
-                // Initialize gold drop movement
                 goldDrop.GetComponent<GoldDrop>().Initialize(goldUI, 10); 
             }
         }
 
-        if (transform.position.magnitude > 7f)
+        if (IsOutOfRange())
         {
             Destroy(gameObject);
         }
@@ -56,5 +52,15 @@ public class RegularBulletBehavior : MonoBehaviour
 
         // Check if the squared distance is within the threshold squared distance
         return distanceSquared <= killDistance * killDistance;
+    }
+
+    private bool IsOutOfRange()
+    {
+        // Calculate squared distance from the spawn position
+        float dx = transform.position.x - spawnPosition.x;
+        float dy = transform.position.y - spawnPosition.y;
+        float distanceSquared = dx * dx + dy * dy;
+        
+        return distanceSquared > 5f * 5f;
     }
 }

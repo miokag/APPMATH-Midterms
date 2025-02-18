@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 7051821709589962650}
   m_Layer: 0
   m_Name: ScatterTower
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -133,8 +133,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 5603925553309326681, guid: 35f3c508ae1f47b4e9d232b01cf6feed, type: 3}
-  fireInterval: 1
+  fireInterval: 2
   bulletCount: 4
-  bulletSpeed: 5
+  bulletSpeed: 2
   bulletLifetime: 3
   bulletKillDistance: 0.8

@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 7012627299352418708}
   m_Layer: 0
   m_Name: SeekerTower
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -138,3 +138,5 @@ MonoBehaviour:
   bulletSpeed: 4
   fireInterval: 0.7
   bulletKillDistance: 0.8
+  baseBulletSpeed: 4
+  baseTurretRange: 4

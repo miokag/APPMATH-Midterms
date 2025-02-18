@@ -4,12 +4,12 @@ using UnityEngine;
 public class ScatterTowerBehavior : MonoBehaviour
 {
     [Header("Scatter Tower Settings")]
-    [SerializeField] private GameObject bulletPrefab; // Regular bullet prefab
-    [SerializeField] private float fireInterval = 1f; // Time between shots
-    [SerializeField] private int bulletCount = 4; // Number of bullets per shot
-    [SerializeField] private float bulletSpeed = 5f; // Speed of bullets
-    [SerializeField] private float bulletLifetime = 3f; // Lifetime of bullets
-    [SerializeField] private float bulletKillDistance = 0.8f; // Distance at which bullets destroy enemies
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private float fireInterval = 2f; 
+    [SerializeField] private int bulletCount = 4; 
+    [SerializeField] private float bulletSpeed = 2f; 
+    [SerializeField] private float bulletLifetime = 3f; 
+    [SerializeField] private float bulletKillDistance = 0.8f; 
 
     private void Start()
     {
@@ -27,26 +27,31 @@ public class ScatterTowerBehavior : MonoBehaviour
 
     private void FireBullets()
     {
-        float angleIncrement = 360f / bulletCount; // Divide 360 degrees by the bullet count
+        float angleIncrement = (2 * Mathf.PI) / bulletCount; // Divide 360 degrees (2π radians) by the bullet count
 
         for (int i = 0; i < bulletCount; i++)
         {
             float angle = i * angleIncrement; // Calculate the angle for each bullet
-            Vector2 direction = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)); // Convert angle to direction
+        
+            // Convert angle to direction using Mathf.Cos and Mathf.Sin to get a vector in the direction
+            Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)); 
 
+            // Instantiate the bullet at the tower's position
             GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
             RegularBulletBehavior bulletBehavior = bullet.GetComponent<RegularBulletBehavior>();
 
             if (bulletBehavior != null)
             {
-                // Assign a target to the bullet
+                // Find the closest enemy and assign it as the target to the bullet
                 Transform target = FindClosestEnemy();
                 bulletBehavior.Initialize(direction, bulletSpeed, target, bulletKillDistance);
             }
 
-            Destroy(bullet, bulletLifetime); // Destroy bullet after lifetime
+            // Destroy the bullet after the specified lifetime
+            Destroy(bullet, bulletLifetime);
         }
     }
+
 
     private Transform FindClosestEnemy()
     {
@@ -74,11 +79,11 @@ public class ScatterTowerBehavior : MonoBehaviour
 
     public void IncreaseBulletCount(int amount)
     {
-        bulletCount = Mathf.Min(bulletCount + amount, 8); // Limit bullet count to 8
+        bulletCount += amount;
     }
-
-    public int BulletCount
+    
+    public void UpgradeSpeed(float speedIncrease)
     {
-        get { return bulletCount; }
+        bulletSpeed += speedIncrease;
     }
 }
