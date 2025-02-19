@@ -76,6 +76,15 @@ public class ScatterTowerBehavior : MonoBehaviour
 
         return closestEnemy;
     }
+    
+    public void ApplyUpgrades(int speedLevel, int rangeLevel)
+    {
+        // Set bullet speed based on speed level
+        bulletSpeed += (speedLevel - 1) * 1f; // Each level adds 1 to speed
+
+        // Set turret range based on range level
+        bulletCount += (rangeLevel - 1) * 1;// Each level adds 1 to bullet count
+    }
 
     public void IncreaseBulletCount(int amount)
     {

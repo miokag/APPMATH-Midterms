@@ -108,13 +108,5 @@ public abstract class TowerBehavior : MonoBehaviour
         return distanceSquared <= turretRange * turretRange;
     }
 
-    public void UpgradeSpeed(float speedIncrease)
-    {
-        bulletSpeed += speedIncrease;
-    }
-
-    public void UpgradeRange(float rangeIncrease)
-    {
-        turretRange += rangeIncrease;
-    }
+    
 }

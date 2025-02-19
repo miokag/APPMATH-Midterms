@@ -2,9 +2,6 @@ using UnityEngine;
 
 public class SeekerTowerBehavior : TowerBehavior
 {
-    [SerializeField] private float baseBulletSpeed = 4f; // Default bullet speed
-    [SerializeField] private float baseTurretRange = 4f; // Default turret range
-
     protected override void FireBullet()
     {
         GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
@@ -20,9 +17,19 @@ public class SeekerTowerBehavior : TowerBehavior
     public void ApplyUpgrades(int speedLevel, int rangeLevel)
     {
         // Set bullet speed based on speed level
-        bulletSpeed = baseBulletSpeed + (speedLevel - 1) * 1f; // Each level adds 1 to speed
+        bulletSpeed += (speedLevel - 1) * 1f; // Each level adds 1 to speed
 
         // Set turret range based on range level
-        turretRange = baseTurretRange + (rangeLevel - 1) * 0.3f; // Each level adds 0.3 to range
+        turretRange += (rangeLevel - 1) * 0.3f; // Each level adds 0.3 to range
+    }
+    
+    public void UpgradeSpeed(float speedIncrease)
+    {
+        bulletSpeed += speedIncrease;
+    }
+
+    public void UpgradeRange(float rangeIncrease)
+    {
+        turretRange += rangeIncrease;
     }
 }

@@ -69,6 +69,10 @@ public class TowerDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         {
             sniperTower.ApplyUpgrades(shop.GetSpeedLevel(), shop.GetRangeLevel());
         }
+        if (newTower.TryGetComponent<ScatterTowerBehavior>(out var scatterTower))
+        {
+            scatterTower.ApplyUpgrades(shop.GetSpeedLevel(), shop.GetRangeLevel());
+        }
     }
 
     private void EnableTowerBehavior(GameObject tower)
